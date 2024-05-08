@@ -1,0 +1,1 @@
+Given a UserInput interface and UserInputFile implementation that reads chess moves and converts them into an array (i.e. "e2e4" -> 4143) validate chess move according to the chess rules and display it in a simple ASCII way
