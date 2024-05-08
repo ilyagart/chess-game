@@ -1,45 +1,37 @@
 package com.whitehatgaming
 package processor
 
-import model.{Board, Color, Square, White}
-import util.DisplayBoard
+import model.*
 import validation.MoveValidator
 
 import scala.util.{Failure, Success}
 
 class MoveProcessorImpl(validator: MoveValidator, var currentPlayer: Color) extends MoveProcessor {
 
-  override def process(moves: List[String]): Unit = {
-    moves.foreach(move => processLocal(move))
+  override def process(gameFiles: List[String]): Unit = {
+    gameFiles.foreach(gameFile => processLocal(gameFile))
   }
 
-  private def processLocal(move: String): Unit = {
-    val file = UserInputFile(move)
+  private def processLocal(gameFile: String): Unit = {
+    val file = UserInputFile(gameFile)
     // reset everything
-    val board: Board = Board.resetBoard
+    val board: Board = Board.emptyBoard()
+    board.resetBoard()
     currentPlayer = White
-    println(s"Initial board for game $move")
-    DisplayBoard.display(board)
-    var currentMove: Array[Int] = file.nextMove()
+    println(s"Initial board for game $gameFile")
+    board.display()
+    var currentMove: Move = file.nextMove()
     while {
       currentMove != null
     } do {
       correctMove(currentMove)
       validator.validate(currentMove, board, currentPlayer) match
         case Failure(exception) =>
-          // don't change current player's color, no actions, just show exception in the console
           println(exception.getMessage)
         case Success(value) =>
-          /*
-          if value - do everything as ok
-          if !value - under
-           */
-          val (ax, ay, bx, by) = (currentMove(0), currentMove(1), currentMove(2), currentMove(3))
-          // all the actions were validated in the validator
-          board.pieces(bx)(by) = board.pieces(ax)(ay)
-          board.pieces(ax)(ay) = Square(None)
+          board.performMove(currentMove)
           currentPlayer = currentPlayer.opposite
-          DisplayBoard.display(board)
+          board.display()
       currentMove = file.nextMove()
     }
   }
