@@ -1,9 +1,10 @@
 package com.whitehatgaming
 package validation
 
-import Direction.*
 import model.*
 import model.Piece.*
+import util.Direction
+import util.Direction.*
 
 import scala.util.{Failure, Success, Try}
 

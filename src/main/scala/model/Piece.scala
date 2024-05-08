@@ -1,7 +1,9 @@
 package com.whitehatgaming
 package model
 
-import Direction.*
+import util.Direction
+import util.Direction.*
+
 
 sealed trait Color {
   def opposite: Color
