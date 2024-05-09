@@ -17,7 +17,7 @@ case object White extends Color {
   def opposite: Color = Black
 }
 
-sealed trait Piece(val name: Char, val color: Color, val directions: Set[Direction] = Set.empty) {
+sealed trait Piece(val name: Char, val color: Color, directions: Set[Direction] = Set.empty) {
   def isOppositeColor(other: Piece): Boolean = color != other.color
 
   def containsDirection(direction: Direction): Boolean = directions.contains(direction)
@@ -55,7 +55,7 @@ object Piece:
       val enemyPieceOpt = board.getPieceAtCoordinates(coordinates.end).find(_.color != color)
 
       val attackDiagonally = coordinates.xDelta == 1 && coordinates.yDelta == 1 && enemyPieceOpt.nonEmpty
-      val moveOneOrTwoVertical = coordinates.xDelta == 0 && coordinates.yDelta > 0 && coordinates.yDelta <= 2
+      val moveOneOrTwoVertical = coordinates.xDelta == 0 && coordinates.yDelta > 0 && coordinates.yDelta <= 2 && enemyPieceOpt.isEmpty
       val moveOneVertical = coordinates.xDelta == 0 && coordinates.yDelta == 1 && enemyPieceOpt.isEmpty
 
       color match
