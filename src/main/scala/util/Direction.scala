@@ -43,6 +43,9 @@ object Direction {
 
   val all: Set[Direction] = Set(UP_LEFT, UP, UP_RIGHT, RIGHT, DOWN_RIGHT, DOWN, DOWN_LEFT, LEFT)
   val diagonal: Set[Direction] = Set(UP_LEFT, UP_RIGHT, DOWN_RIGHT, DOWN_LEFT)
+  val whitePawn: Set[Direction] = Set(UP, UP_RIGHT, UP_LEFT)
+  val blackPawn: Set[Direction] = Set(DOWN, DOWN_LEFT, DOWN_RIGHT)
+  val pawn: Set[Direction] = whitePawn ++ blackPawn
 
   def isDiagonal(direction: Direction, coordinates: Coordinates): Boolean = diagonal.contains(direction) && math.abs(coordinates.start.x - coordinates.end.x) == math.abs(coordinates.start.y - coordinates.end.y)
 

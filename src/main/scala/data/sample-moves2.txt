@@ -1,6 +1,7 @@
 e2e4
 e4e5
 e7e5
+e4e5
 f1d3
 f8d6
 d1f3

@@ -82,7 +82,7 @@ class MoveValidatorImpl extends MoveValidator {
     val startPiece = board.getPieceAtCoordinates(coordinates.start).get
 
     Direction.find(coordinates) match
-      case Some(direction) if startPiece.canMoveTo(direction, coordinates) =>
+      case Some(direction) if startPiece.canMoveTo(direction, coordinates, board) =>
         startPiece match
           case Knight(_) => true
           case _ if noCollidingPieces(coordinates, board, direction) => true

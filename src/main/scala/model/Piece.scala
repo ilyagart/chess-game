@@ -22,41 +22,54 @@ sealed trait Piece(val name: Char, val color: Color, val directions: Set[Directi
 
   def containsDirection(direction: Direction): Boolean = directions.contains(direction)
 
-  def canMoveTo(direction: Direction, coordinates: Coordinates): Boolean = containsDirection(direction)
+  def canMoveTo(direction: Direction, coordinates: Coordinates, board: Board): Boolean = containsDirection(direction)
 }
 
 object Piece:
   case class Rook(override val color: Color) extends Piece('r', color, Set(LEFT, UP, RIGHT, DOWN))
 
   case class Knight(override val color: Color) extends Piece('n', color) {
-    override def canMoveTo(direction: Direction, coordinates: Coordinates): Boolean =
+    override def canMoveTo(direction: Direction, coordinates: Coordinates, board: Board): Boolean =
       (coordinates.xDelta == 1 && coordinates.yDelta == 2) ||
         (coordinates.xDelta == 2 && coordinates.yDelta == 1)
   }
 
   case class Bishop(override val color: Color) extends Piece('b', color, diagonal) {
-    override def canMoveTo(direction: Direction, coordinates: Coordinates): Boolean = Direction.isDiagonal(direction, coordinates)
+    override def canMoveTo(direction: Direction, coordinates: Coordinates, board: Board): Boolean = Direction.isDiagonal(direction, coordinates)
   }
 
   case class King(override val color: Color) extends Piece('k', color, all) {
-    override def canMoveTo(direction: Direction, coordinates: Coordinates): Boolean =
+    override def canMoveTo(direction: Direction, coordinates: Coordinates, board: Board): Boolean =
       containsDirection(direction) && coordinates.xDelta <= 1 && coordinates.yDelta <= 1
   }
 
   case class Queen(override val color: Color) extends Piece('q', color, all) {
-    override def canMoveTo(direction: Direction, coordinates: Coordinates): Boolean = {
+    override def canMoveTo(direction: Direction, coordinates: Coordinates, board: Board): Boolean = {
       val isValidDiagonalDirection = Direction.isDiagonal(direction, coordinates)
-      isValidDiagonalDirection || (!Direction.diagonal.contains(direction) && containsDirection(direction))
-      //will this work ok?
+      isValidDiagonalDirection || (all -- diagonal).contains(direction)
     }
   }
 
-  case class Pawn(override val color: Color) extends Piece('p', color, Set(UP, DOWN, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT)) {
-    override def canMoveTo(direction: Direction, coordinates: Coordinates): Boolean = {
-      containsDirection(direction) && ((color == White && coordinates.xDelta == 0 &&
-        coordinates.start.y == 1 && coordinates.yDelta <= 2) ||
-        (color == Black && coordinates.xDelta == 0 && coordinates.start.y == 6 && coordinates.yDelta <= 2) ||
-        (coordinates.xDelta == 0 && coordinates.yDelta == 1)) // plus diagonal moves
+  case class Pawn(override val color: Color) extends Piece('p', color, pawn) {
+    override def canMoveTo(direction: Direction, coordinates: Coordinates, board: Board): Boolean = {
+      val enemyPieceOpt = board.getPieceAtCoordinates(coordinates.end).find(_.color != color)
+
+      val attackDiagonally = coordinates.xDelta == 1 && coordinates.yDelta == 1 && enemyPieceOpt.nonEmpty
+      val moveOneOrTwoVertical = coordinates.xDelta == 0 && coordinates.yDelta > 0 && coordinates.yDelta <= 2
+      val moveOneVertical = coordinates.xDelta == 0 && coordinates.yDelta == 1 && enemyPieceOpt.isEmpty
+
+      color match
+        case Black if blackPawn.contains(direction) =>
+          (coordinates.start.y == 6 && moveOneOrTwoVertical) ||
+            attackDiagonally ||
+            moveOneVertical
+
+        case White if whitePawn.contains(direction) =>
+          (coordinates.start.y == 1 && moveOneOrTwoVertical) ||
+            attackDiagonally ||
+            moveOneVertical
+
+        case _ => false
     }
   }
 
