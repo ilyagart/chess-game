@@ -1,4 +1,4 @@
-package com.whitehatgaming
+package com.chess
 package validation
 
 import model.{Board, Color}

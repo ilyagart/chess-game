@@ -1,8 +1,10 @@
-package com.whitehatgaming
+package com.chess
 package processor
 
 import model.*
 import validation.MoveValidator
+
+import com.whitehatgaming.UserInputFile
 
 import scala.util.{Failure, Success}
 

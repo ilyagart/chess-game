@@ -1,9 +1,9 @@
-package com.whitehatgaming
+package com.chess
 
 import processor.MoveProcessorImpl
 import validation.MoveValidatorImpl
 
-import com.whitehatgaming
+import com.chess
 
 import java.nio.file.{FileSystems, Files}
 import scala.jdk.CollectionConverters.*

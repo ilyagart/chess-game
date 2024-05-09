@@ -1,4 +1,4 @@
-package com.whitehatgaming
+package com.chess
 package model
 
 import util.Direction

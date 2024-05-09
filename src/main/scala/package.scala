@@ -1,8 +1,8 @@
 package com
 
-import com.whitehatgaming.model.Square
+import com.chess.model.Square
 
-package object whitehatgaming {
+package object chess {
   type Move = Array[Int]
   type BoardArray = Array[Array[Square]]
 }

@@ -1,10 +1,10 @@
-package com.whitehatgaming
+package com.chess
 package model
 
 import model.Piece.King
 import model.Square.show
 
-import com.whitehatgaming
+import com.chess
 
 class Board(val square: BoardArray) {
   def isPieceTheRightColor(coordinate: Position, color: Color): Boolean = {
